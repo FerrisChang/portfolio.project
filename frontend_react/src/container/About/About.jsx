@@ -1,28 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import './About.scss'
+import { AppWrap } from '../../wrapper'
 
-const abouts = [
-  {title: 'Web Development', Description: 'I am a good web developer.', imgUrl: ''},
-  {title: 'Web Design', Description: 'I am a good web developer.', imgUrl: ''},
-  {title: 'Web Animations', Description: 'I am a good web developer.', imgUrl: ''},
-  {title: 'UI/UX', Description: 'I am a good web developer.', imgUrl: ''},
-  {title: 'Front end', Description: 'I am a good web developer.', imgUrl: ''},
-  {title: 'Back end', Description: 'I am a good web developer.', imgUrl: ''},
+import { urlFor, client } from '../../client'
 
-
-
-]
 const About = () => {
+  const [abouts, setAbouts] = useState([]);
+
+  useEffect(() => {
+    const query = '*[_type == "abouts"]'
+    client.fetch(query).then((data) => setAbouts(data))
+  }, []);
+
+
   return (
     <>
-      <h2 className='head-text'>
-        I Know That 
-        <span>Good Design</span>
-        <br />
-        means
-        <span>Good Business</span>
-      </h2>
+      <h2 className='head-text'>I Know That <span>Good Development</span><br />means <span>Good Business</span></h2>
       <div className='app__profiles'>
         {abouts.map((about, index) => (
           <motion.div
@@ -32,9 +26,9 @@ const About = () => {
             className='app__profile-item'
             key={about.title + index}
             >
-              <img src={about.imgUrl} alt={about.title} />
+              <img src={urlFor(about.imgUrl)} alt={about.title} />
               <h2 className='bold-text' style={{ marginTop: 20 }}>{about.title}</h2>
-              <p className='p-text' style={{ marginTop: 20 }}>{about.Description}</p>
+              <p className='p-text' style={{ marginTop: 20 }}>{about.description}</p>
 
             </motion.div>
         ))}
@@ -43,4 +37,4 @@ const About = () => {
   )
 }
 
-export default About
+export default AppWrap(About, 'about')
